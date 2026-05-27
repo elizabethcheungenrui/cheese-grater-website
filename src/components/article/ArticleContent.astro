@@ -96,6 +96,15 @@ const { data: authorLinks } = await supabase
             <div class="article-body" set:html={article.content} />
           )
         }
+        
+        {
+          article.liveblog_eid && (
+            <>
+              <div id="LB24_LIVE_CONTENT" data-eid={article.liveblog_eid}></div>
+              <script is:inline src="https://v.24liveblog.com/24.js"></script>
+            </>
+          )
+        }
       </section>
     </main>
 
