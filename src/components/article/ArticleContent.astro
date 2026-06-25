@@ -9,7 +9,7 @@ import { getSubsectionArticles } from '../../lib/getSectionArticles';
 const { article, isEditor } = Astro.props;
 
 // fetch related articles at build/request time
-const data = await getSubsectionArticles(article.section,article.subsection);
+const data = await getSubsectionArticles(article.section,article.subsection, 12);
 
 const filtered = data.articles.filter((a) => a.slug !== article.slug);
 const dataTop = filtered.slice(0, 4);

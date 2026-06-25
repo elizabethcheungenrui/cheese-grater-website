@@ -45,11 +45,22 @@ export async function getSectionArticles(
 export async function getSubsectionArticles(
   section: string,
   subsection: string,
-  limit?: number,
+  limit = 12,
 ): Promise<HomepageSection> {
   let query = supabase
     .from("articles")
-    .select("*")
+    .select(`
+      slug,
+      title,
+      summary,
+      author,
+      author_thumbnail,
+      image_url,
+      image_width,
+      image_height,
+      subsection,
+      date_published
+    `)
     .eq("subsection", subsection)
     .order("date_published", { ascending: false });
 
