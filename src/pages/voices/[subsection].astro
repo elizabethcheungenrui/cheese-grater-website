@@ -1,0 +1,35 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionList from '../../components/section-list/SectionList.astro';
+
+import { getSubsectionArticles } from '../../lib/getSectionArticles';
+import { getSupabaseClient } from '../../lib/supabaseClient';
+
+const supabase = getSupabaseClient();
+
+const subsectionSlug = Astro.params.subsection;
+
+if (!subsectionSlug) {
+  throw new Error("Missing subsection param");
+}
+
+const { data: subsectionRow, error: subsectionError } = await supabase
+  .from("subsections")
+  .select("name, slug")
+  .eq("section", "Voices")
+  .eq("slug", subsectionSlug)
+  .eq("is_active", true)
+  .single();
+
+if (subsectionError || !subsectionRow) {
+  throw new Error(`Subsection not found: ${subsectionSlug}`);
+}
+
+const data = await getSubsectionArticles("Voices", subsectionRow.name);
+---
+
+<BaseLayout title={`${subsectionRow.name} – Voices & Letters – The Cheese Grater Magazine`}>
+  <SectionList data={data} />
+</BaseLayout>

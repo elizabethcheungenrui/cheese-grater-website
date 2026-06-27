@@ -1,0 +1,42 @@
+---
+import CCard from '../cards/CCard';
+import { formatDate } from '../../methods/formatting';
+
+const { data } = Astro.props;
+---
+
+<ul class="subpage-list">
+  {
+    data.articles.map((article) => (
+      <li>
+        <CCard
+          slug={article.slug}
+          section={data.section}
+          title={article.title}
+          image={article.image_url ?? article.author_thumbnail}
+          tag={article.subsection}
+          date={formatDate(article.date_published)}
+          category="subpage"
+        />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .subpage-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    list-style: none;
+    margin: 0;
+    padding: 2rem 10rem;
+    gap: 2rem;
+  }
+
+  @media (max-width: 1024px) {
+    .subpage-list {
+      grid-template-columns: 1fr 1fr;
+      padding: 1.5rem;
+    }
+  }
+</style>

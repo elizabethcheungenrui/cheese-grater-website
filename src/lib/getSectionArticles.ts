@@ -45,7 +45,7 @@ export async function getSectionArticles(
 export async function getSubsectionArticles(
   section: string,
   subsection: string,
-  limit = 12,
+  limit?: number,
 ): Promise<HomepageSection> {
   let query = supabase
     .from("articles")

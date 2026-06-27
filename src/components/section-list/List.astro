@@ -1,42 +1,116 @@
 ---
 import CCard from '../cards/CCard';
 import { formatDate } from '../../methods/formatting';
+import { getSupabaseClient } from '../../lib/supabaseClient';
+import '../header-footer/Header.css'
 
 const { data } = Astro.props;
+const supabase = getSupabaseClient();
+const section = data.section.toLowerCase();
+const showNavBar = data.section != "Podcast";
+
+let subsections = [];
+
+const { data: subsectionRows, error } = await supabase
+  .from("subsections")
+  .select("name, slug, sort_order")
+  .eq("section", data.section)
+  .eq("is_active", true)
+  .order("sort_order", { ascending: true });
+
+if (error) {
+  console.error("Failed to load subsections:", error);
+}
+
+subsections = subsectionRows ?? [];
 ---
 
-<ul class="subpage-list">
-  {
-    data.articles.map((article) => (
-      <li>
-        <CCard
-          slug={article.slug}
-          section={data.section}
-          title={article.title}
-          image={article.image_url ?? article.author_thumbnail}
-          tag={article.subsection}
-          date={formatDate(article.date_published)}
-          category="subpage"
-        />
-      </li>
-    ))
-  }
-</ul>
+<div class="section-list">
+  {showNavBar && (
+    <nav class="menu-bar subsection-navbar">
+      <a href=`/${section}` class="menu-item"><p><b>All</b></p></a>
+
+      {subsections.map((subsection) => (
+        <a
+          href={`/${section}/${subsection.slug}`}
+          class="menu-item"
+        >
+        <p><b>{subsection.name}</b></p>
+        </a>
+      ))}
+    </nav>
+  )}
+
+  <ul class="card-array">
+    {
+      data.articles.map((article) => (
+        <li>
+          <CCard
+            slug={article.slug}
+            section={data.section}
+            title={article.title}
+            image={article.image_url ?? article.author_thumbnail}
+            tag={article.subsection}
+            date={formatDate(article.date_published)}
+            category="subpage"
+          />
+        </li>
+      ))
+    }
+  </ul>
+</div>
 
 <style>
-  .subpage-list {
+  .section-list {
+    display: grid;
+  }
+
+  .menu-bar.subsection-navbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+
+    grid-auto-flow: unset;
+    grid-auto-columns: unset;
+
+    background-color: #e9e9e9;
+    padding: 0 10rem;
+  }
+
+  .menu-bar.subsection-navbar .menu-item {
+    white-space: nowrap;
+  }
+
+  .card-array {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     list-style: none;
-    margin: 0;
-    padding: 2rem 10rem;
+    margin: 0 10rem;
+    padding: 2rem 0;
     gap: 2rem;
   }
 
-  @media (max-width: 1024px) {
-    .subpage-list {
+  @media (max-width: 1024px) { 
+    .menu-bar.subsection-navbar {
+      padding: 0 1rem;
+    }
+
+    .subsection-navbar p {
+      font-size: 0.9rem;
+    }
+
+    .subsection-navbar .menu-item {
+      padding: 0.5rem 0.5rem;
+    }
+
+    .card-array {
       grid-template-columns: 1fr 1fr;
-      padding: 1.5rem;
+      margin: 0 1.5rem;
+      padding: 1.5rem 0;
     }
   }
 </style>
