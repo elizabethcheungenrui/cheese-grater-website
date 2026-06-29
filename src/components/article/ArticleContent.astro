@@ -34,7 +34,7 @@ const { data: authorLinks } = await supabase
     <main class="main-article">
       <header class="main-heading">
         <p class="date">
-          <a href={`/${article.section.toLowerCase()}`} class="section-link">
+        <a href={`/${article.section.toLowerCase()}/${article.subsection.toLowerCase()}`} class="section-link">
             {article.subsection}
           </a>
           {' / '}
