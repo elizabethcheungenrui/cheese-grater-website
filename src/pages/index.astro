@@ -20,6 +20,7 @@ import '../styles/home.css';
 ---
 
 <BaseLayout title="The Cheese Grater Magazine">
+  <BestPub />
   <div class="desktop">
     <Home
       voices={voices}
@@ -36,7 +37,6 @@ import '../styles/home.css';
       client:load
     />
   </div>
-  <BestPub />
   <ArticleList data={investigations} />
   <Podcast />
   <ArticleList data={humour} />
