@@ -94,6 +94,13 @@ subsections = subsectionRows ?? [];
     gap: 2rem;
   }
 
+  .card-array img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
   @media (max-width: 1024px) { 
     .menu-bar.subsection-navbar {
       padding: 0 1rem;
@@ -107,10 +114,14 @@ subsections = subsectionRows ?? [];
       padding: 0.5rem 0.5rem;
     }
 
-    .card-array {
-      grid-template-columns: 1fr 1fr;
+    .card-array {    
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       margin: 0 1.5rem;
       padding: 1.5rem 0;
+    }
+
+    .card-array > li {
+      min-width: 0;
     }
   }
 </style>
