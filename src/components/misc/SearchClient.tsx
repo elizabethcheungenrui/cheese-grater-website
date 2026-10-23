@@ -40,8 +40,28 @@ export default function SearchClient() {
 
       const { data, error } = await supabase.rpc("search_articles", { query });
 
-      if (!cancelled && !error && data) {
-        setResults(data);
+      if (cancelled) return;
+
+      if (error) {
+        console.error("Search failed:", error);
+        setResults([]);
+      } else {
+        setResults(data ?? []);
+
+        // Log successful searches without blocking the UI
+        if (query.length >= 3 && query.length <= 200) {
+          void supabase
+            .from("search_logs")
+            .insert({
+              query,
+              result_count: data?.length ?? 0,
+            })
+            .then(({ error: logError }) => {
+              if (logError) {
+                console.warn("Search logging failed:", logError);
+              }
+            });
+        }
       }
 
       setLoading(false);
