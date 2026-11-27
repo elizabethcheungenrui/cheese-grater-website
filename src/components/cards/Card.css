@@ -183,3 +183,30 @@
 .date.c-card-date.subpage {
   color: var(--cg-yellow);
 }
+
+/* ============================================
+   AUTHOR-CARD
+============================================ */
+.card.author-card .author {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card.author-card .author-thumbnail {
+  display: block;
+  width: 100%;
+  clip-path: circle(50%);
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.card.author-card .author-name {
+  font-family: "Bitter";
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+}
+ 
